@@ -1,6 +1,6 @@
-export CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=3
 
-data=~/simultaneous_translation/simul_confi/data_bins/mustc_${src}${tgt}
+data=~/simultaneous_translation/simul_confi/data_bins/mustc_enzh
 modelfile=~/simultaneous_translation/ITST/checkpoints_mustc/ITST_12-27
 
 #data=PATH_TO_DATA
@@ -17,7 +17,7 @@ python train.py --ddp-backend=no_c10d ${data} --arch transformer_itst \
  --dropout 0.3 \
  --encoder-embed-dim 512 --encoder-ffn-embed-dim 1024 \
  --decoder-embed-dim 512 --decoder-ffn-embed-dim 1024 \
- --encoder-layers 6 --decoer-layers 6 \
+ --encoder-layers 6 --decoder-layers 6 \
  --encoder-attention-heads 4 \
  --decoder-attention-heads 4 \
  --criterion label_smoothed_cross_entropy_with_itst_t2t \
@@ -27,7 +27,7 @@ python train.py --ddp-backend=no_c10d ${data} --arch transformer_itst \
  --no-progress-bar \
  --fp16 \
  --save-dir ${modelfile} \
- --max-tokens 8192 --update-freq 1 \
+ --max-tokens 4000 --update-freq 8 \
  --save-interval-updates 1000 \
  --keep-interval-updates 200 \
  --log-interval 100
