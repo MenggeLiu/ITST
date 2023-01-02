@@ -155,7 +155,7 @@ class SimulTransTextAgent(TextAgent):
         segment_tok = self.src_tokenizer.tokenize(segment_norm, return_str=True,
                                                   aggressive_dash_splits=self.aggressive_dash)
         segment_tok = segment_tok[1:-1].strip()
-        print("segment", segment)
+        # print("segment", segment)
         if self.lower:
             # print("lower", self.lower)
             segment_tok = segment_tok.lower()
