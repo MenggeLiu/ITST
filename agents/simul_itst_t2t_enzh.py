@@ -145,7 +145,7 @@ class SimulTransTextAgent(TextAgent):
     def segment_to_units(self, segment, states):
         # tok+bpe 输入经过bpe后直接返回
         # print("segment", segment)
-        return [segment]
+        # return [segment]
         # src preprocess tok -> bpe
         # print("[segment]:\t", segment)
         # Split a full word (segment) into subwords (units)
