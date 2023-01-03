@@ -442,6 +442,8 @@ class MonotonicAttention(MultiheadAttention):
         src_len = value.size(0)
         if global_wait_k is not None:
             self.waitk_lagging = global_wait_k
+        else:
+            self.waitk_lagging = None
 
         if key_padding_mask is not None:
             assert not key_padding_mask[:, 0].any(), "Only right padding is supported."
