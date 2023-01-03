@@ -48,6 +48,40 @@ class LatencyAugmentedLabelSmoothedCrossEntropyCriterion(
             self.average_method,
         )
 
+    def forward(self, model, sample, update_num=None, reduce=True):
+        """Compute the loss for the given sample.
+
+        Returns a tuple with three elements:
+        1) the loss
+        2) the sample size, which is used as the denominator for the gradient
+        3) logging outputs to display while training
+        """
+
+        # for speech-to-text simultaneous translation with fixed pre-decision
+        # train_threshold = 0.8 + 0.2 * math.exp(-update_num / 60000)
+        # if update_num < 4000:
+        #     train_threshold = None
+        # net_output = model(**sample["net_input"], train_threshold=train_threshold)
+        net_output = model(**sample["net_input"])
+
+        loss, nll_loss = self.compute_loss(model, net_output, sample, reduce=reduce)
+        # pdb.set_trace()
+        sample_size = (
+            sample["target"].size(0) if self.sentence_avg else sample["ntokens"]
+        )
+        logging_output = {
+            "loss": loss.data,
+            "nll_loss": nll_loss.data,
+            "ntokens": sample["ntokens"],
+            "nsentences": sample["target"].size(0),
+            "sample_size": sample_size,
+        }
+        if self.report_accuracy:
+            n_correct, total = self.compute_accuracy(model, net_output, sample)
+            logging_output["n_correct"] = utils.item(n_correct.data)
+            logging_output["total"] = utils.item(total.data)
+        return loss, sample_size, logging_output
+
     @staticmethod
     def add_args(parser):
         super(
