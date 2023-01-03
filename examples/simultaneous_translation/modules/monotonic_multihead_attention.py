@@ -263,7 +263,7 @@ class MonotonicAttention(MultiheadAttention):
         assert query is not None
         assert key is not None
 
-        if (self.waitk_lagging and self.waitk_lagging <= 0) or not self.training:
+        if self.waitk_lagging is None or self.waitk_lagging <= 0 or not self.training:
             p_choose, _, _, _ = self.p_choose(query, key, key_padding_mask)
 
             # 2. compute expected_alignment
@@ -339,7 +339,7 @@ class MonotonicAttention(MultiheadAttention):
         assert query is not None
         assert key is not None
 
-        if self.waitk_lagging and self.waitk_lagging <= 0:
+        if self.waitk_lagging is None or self.waitk_lagging <= 0:
 
             # 1. compute stepwise probability
             p_choose, _, _, _ = self.p_choose(query, key, key_padding_mask)
