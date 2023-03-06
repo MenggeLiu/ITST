@@ -201,7 +201,7 @@ def get_features_or_waveform(path: str, need_waveform=False):
 
 
 def _collate_frames(
-    frames: List[torch.Tensor], is_audio_input: bool = True
+    frames: List[torch.Tensor], is_audio_input: bool = False
 ) -> torch.Tensor:
     """
     Convert a list of 2D frames into a padded 3D tensor
@@ -212,7 +212,6 @@ def _collate_frames(
         3D tensor of size len(frames)*len_max*f_dim where len_max is max of L[i]
     """
     max_len = max(frame.size(0) for frame in frames)
-    is_audio_input = True
     if is_audio_input:
         out = frames[0].new_zeros((len(frames), max_len))
     else:
