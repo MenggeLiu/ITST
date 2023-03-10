@@ -91,7 +91,10 @@ class MUSTC(Dataset):
         self.data = []
         for wav_filename, _seg_group in groupby(segments, lambda x: x["wav"]):
             wav_path = wav_root / wav_filename
-            sample_rate = sf.info(wav_path.as_posix()).samplerate
+            try:
+                sample_rate = sf.info(wav_path.as_posix()).samplerate
+            except:
+                continue
             seg_group = sorted(_seg_group, key=lambda x: float(x["offset"]))
             for i, segment in enumerate(seg_group):
                 offset = int(float(segment["offset"]) * sample_rate)
