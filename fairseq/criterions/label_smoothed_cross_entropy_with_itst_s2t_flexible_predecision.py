@@ -52,12 +52,16 @@ class LabelSmoothedCrossEntropyCriterionWithITSTS2TFlexiblePredecison(FairseqCri
         label_smoothing,
         ignore_prefix_size=0,
         report_accuracy=False,
+        train_delta_min=0.5,
+        train_delta_decay_steps=50000
     ):
         super().__init__(task)
         self.sentence_avg = sentence_avg
         self.eps = label_smoothing
         self.ignore_prefix_size = ignore_prefix_size
         self.report_accuracy = report_accuracy
+        self.train_delta_min = train_delta_min
+        self.train_delta_decay_steps = train_delta_decay_steps
 
     @staticmethod
     def add_args(parser):
@@ -69,6 +73,10 @@ class LabelSmoothedCrossEntropyCriterionWithITSTS2TFlexiblePredecison(FairseqCri
                             help='report accuracy metric')
         parser.add_argument('--ignore-prefix-size', default=0, type=int,
                             help='Ignore first N tokens')
+        parser.add_argument('--train-delta-min', default=0.5, type=float,
+                            help='min train delta')
+        parser.add_argument('--train-delta-decay-steps', default=50000, type=int,
+                            help='train delta decay steps')
         # fmt: on
 
     def forward(self, model, sample, update_num=None, reduce=True):
@@ -79,9 +87,10 @@ class LabelSmoothedCrossEntropyCriterionWithITSTS2TFlexiblePredecison(FairseqCri
         2) the sample size, which is used as the denominator for the gradient
         3) logging outputs to display while training
         """
-
+        assert update_num is not None
         if update_num is not None:
-            train_threshold = 0.5 + 0.5 * math.exp(-update_num / 200000)
+            train_threshold = self.train_delta_min + (1 - self.train_delta_min) * \
+                              math.exp(-update_num / self.train_delta_decay_steps)
             if update_num < 4000:
                 train_threshold = None
         else:
