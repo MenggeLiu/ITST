@@ -87,7 +87,7 @@ class LabelSmoothedCrossEntropyCriterionWithITSTS2TFlexiblePredecison(FairseqCri
         2) the sample size, which is used as the denominator for the gradient
         3) logging outputs to display while training
         """
-        assert update_num is not None
+        # assert update_num is not None
         if update_num is not None:
             train_threshold = self.train_delta_min + (1 - self.train_delta_min) * \
                               math.exp(-update_num / self.train_delta_decay_steps)
