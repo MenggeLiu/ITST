@@ -4,17 +4,18 @@ set -e
 
 mustc_root=/home/liumengge/datasets_local/MuST-C/v2.0
 lang=zh
-modelfile=/home/liumengge/ITST/checkpoints_st/mustc_enzh
+model_name=mustc_enzh_decay_step5w #mustc_enzh_spm30000
+modelfile=/home/liumengge/ITST/checkpoints_st/$model_name
 
 wav_list=/home/liumengge/datasets_local/MuST-C/v2.0/en-zh/eval/tst-COMMON/tst-COMMON.wav_list
 reference=/home/liumengge/datasets_local/MuST-C/v2.0/en-zh/eval/tst-COMMON/tst-COMMON.zh
 
 # test threshold in ITST, such as 0.8
-threshold=0.95
-gpu_id=6
-port=1237
+threshold=0.5
+gpu_id=0
+port=12321
 ckpt=checkpoint_best.pt
-output_dir=/home/liumengge/ITST/simul_st_decodes/mustc_enzh_st/$ckpt/delta$threshold
+output_dir=/home/liumengge/ITST/simul_st_decodes/$model_name/$ckpt/delta$threshold
 
 # average best 5 checkpoints
 # python scripts/average_checkpoints.py --inputs ${modelfile} --num-update-checkpoints 5 \
