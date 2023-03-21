@@ -7,10 +7,10 @@ lang=zh
 #    --data-root ${mustc_root} --tgt-lang ${lang}
 
 # prepare vocabulary
-# python3 examples/speech_to_text/prep_vocab.py \
-#    --data-root ${mustc_root} \
-#    --vocab-type unigram --vocab-size 10000 --joint \
-#    --tgt-lang ${lang}
+python3 examples/speech_to_text/prep_vocab.py \
+    --data-root ${mustc_root} \
+    --vocab-type unigram --vocab-size 20000 --joint \
+    --tgt-lang ${lang}
 
 # generate the wav list and reference file for SimulEval
 eval_data=${mustc_root}/en-zh/eval

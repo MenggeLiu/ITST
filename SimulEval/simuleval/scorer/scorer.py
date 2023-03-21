@@ -78,7 +78,9 @@ class Scorer(object):
         option_dict = {
             "eval_latency_unit": self.eval_latency_unit
         }
-
+        for x in self.data.values():
+            print(len(x))
+        print(len(self.data["src"]))
         assert all(
             len(x) == len(self.data["src"]) for x in self.data.values()
         )
