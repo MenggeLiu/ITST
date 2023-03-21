@@ -103,6 +103,7 @@ class LabelSmoothedCrossEntropyCriterionWithITSTS2TFlexiblePredecison(FairseqCri
             (info_transport / info_transport.sum(dim=-1, keepdim=True))
             * bulid_weight_matrix_s2t(info_transport.size(-1), info_transport.size(-2))
         ).sum() / info_transport.size(1)
+
         norm_loss = (
             torch.dist(
                 info_transport,

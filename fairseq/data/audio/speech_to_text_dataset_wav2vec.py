@@ -12,6 +12,8 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
+import torch.nn.functional as F
+
 from fairseq.data import (
     ConcatDataset,
     Dictionary,
@@ -306,6 +308,9 @@ class SpeechToTextDataset(FairseqDataset):
         source = get_features_or_waveform(
             self.audio_paths[index], need_waveform=self.data_cfg.use_audio_input
         )
+        if self.cfg.standardize_audio:
+            with torch.no_grad():
+                source = F.layer_norm(source, source.shape)
         # print(source)
         if self.feature_transforms is not None:
             assert not self.data_cfg.use_audio_input
